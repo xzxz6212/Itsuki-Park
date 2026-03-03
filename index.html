@@ -2,28 +2,22 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>正在查找最近公園...</title>
+    <title>正在查找附近公園...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 80px;
-        }
-    </style>
 </head>
-<body>
+<body style="text-align:center;margin-top:80px;font-family:Arial;">
 
-<h2>正在為您查找最近的公園...</h2>
-<p id="status">請允許定位權限</p>
+<h2>正在為您查找附近的公園...</h2>
+<p id="status">正在檢查定位權限</p>
 
 <script>
 window.onload = function () {
 
+    const fallbackUrl = "https://tour.ibon.com.tw/event/6982deb7f774864bb7f134e5";
     const status = document.getElementById("status");
 
     if (!navigator.geolocation) {
-        status.innerText = "瀏覽器不支援定位功能";
+        window.location.replace(fallbackUrl);
         return;
     }
 
@@ -32,18 +26,18 @@ window.onload = function () {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
 
-            // Google Maps 搜尋網址（完全免費）
-            const url = `https://www.google.com/maps/search/公園/@${lat},${lng},17z`;
+            const googleUrl = `https://www.google.com/maps/search/公園/@${lat},${lng},18z`;
 
-            // 直接跳轉
-            window.location.replace(url);
+            window.location.replace(googleUrl);
         },
         function (error) {
-            status.innerText = "定位失敗：" + error.message;
+            // 拒絕、失敗、超時 都會進這裡
+            window.location.replace(fallbackUrl);
         },
         {
             enableHighAccuracy: true,
-            timeout: 10000
+            timeout: 8000,
+            maximumAge: 0
         }
     );
 };
