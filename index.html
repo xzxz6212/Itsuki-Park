@@ -14,10 +14,16 @@
 window.onload = function () {
 
     const fallbackUrl = "https://tour.ibon.com.tw/event/6982deb7f774864bb7f134e5";
+    const fallbackUrlAfter4th = "https://meridianproject.kktix.cc/events/1eeaae7e";
     const status = document.getElementById("status");
 
+    // 檢查當前日期是否已超過2026/03/31
+    const currentDate = new Date();
+    const cutoffDate = new Date(2026, 2, 31); // 月份從0開始，所以3月是2
+    const urlToUse = currentDate > cutoffDate ? fallbackUrlAfter4th : fallbackUrl;
+
     if (!navigator.geolocation) {
-        window.location.replace(fallbackUrl);
+        window.location.replace(urlToUse);
         return;
     }
 
@@ -32,7 +38,7 @@ window.onload = function () {
         },
         function (error) {
             // 拒絕、失敗、超時 都會進這裡
-            window.location.replace(fallbackUrl);
+            window.location.replace(urlToUse);
         },
         {
             enableHighAccuracy: true,
